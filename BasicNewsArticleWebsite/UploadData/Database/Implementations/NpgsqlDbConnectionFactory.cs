@@ -2,8 +2,9 @@ using System.Data;
 using Microsoft.Extensions.Options;
 using Npgsql;
 using UploadData.AppSettings;
+using UploadData.Database.Interfaces;
 
-namespace UploadData.Database;
+namespace UploadData.Database.Implementations;
 
 public class NpgsqlDbConnectionFactory : IDbConnectionFactory
 {

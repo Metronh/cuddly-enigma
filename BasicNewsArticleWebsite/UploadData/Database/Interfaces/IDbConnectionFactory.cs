@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace UploadData.Database;
+namespace UploadData.Database.Interfaces;
 
 public interface IDbConnectionFactory
 {

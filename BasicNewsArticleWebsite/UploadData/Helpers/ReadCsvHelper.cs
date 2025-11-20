@@ -1,12 +1,8 @@
 using System.Globalization;
 using CsvHelper;
-using Microsoft.Extensions.Options;
-using UploadData.AppSettings;
-using UploadData.Interfaces;
 using UploadData.Interfaces.Services;
-using UploadData.Models;
 
-namespace UploadData.Services;
+namespace UploadData.Helpers;
 
 public class ReadCsvHelper<T> : IReadCsvHelper<T>
 {
