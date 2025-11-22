@@ -1,5 +1,9 @@
 using ArticleService.AppSettings;
+using ArticleService.Database;
 using ArticleService.Endpoints;
+using ArticleService.Interfaces.Database;
+using ArticleService.Interfaces.Services;
+using ArticleService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
+builder.Services.AddSingleton<IMongoDbConnectionFactory, MongoDbConnectionFactory>();
+builder.Services.AddSingleton<IArticlesService, ArticlesService>();
 
 var app = builder.Build();
 
