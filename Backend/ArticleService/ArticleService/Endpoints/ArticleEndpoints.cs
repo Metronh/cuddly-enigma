@@ -23,7 +23,7 @@ public static class ArticleEndpoints
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Error here");
+            Console.WriteLine(ex.Message);
             return TypedResults.Problem(statusCode:500);
         }
     }
@@ -38,8 +38,8 @@ public static class ArticleEndpoints
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Failure");
-            return TypedResults.Problem(statusCode: 404);
+            Console.WriteLine(ex.Message);
+            return TypedResults.Problem(statusCode: 500);
         }
     }
 }
