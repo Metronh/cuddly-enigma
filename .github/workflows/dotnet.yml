@@ -25,9 +25,9 @@ jobs:
     - name: Build UploadData
       run: dotnet build Setup/UploadData/UploadData.csproj --no-restore
     - name: Restore dependencies ArticleService
-      run: dotnet restore Backend/ArticleService/ArticleService.csproj
+      run: dotnet restore Backend/ArticleService/ArticleService/ArticleService.csproj
     - name: Build ArticleService
-      run: dotnet build Backend/ArticleService/ArticleService.csproj --no-restore
+      run: dotnet build Backend/ArticleService/ArticleService/ArticleService.csproj --no-restore
 
 #    - name: Test
 #      run: dotnet test --no-build --verbosity normal
