@@ -4,8 +4,8 @@ services:
     container_name: UserDB
     restart: always
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: temppassword
+      POSTGRES_USER: ${POSTGRESUSER}
+      POSTGRES_PASSWORD: ${POSTGRESPASSWORD}
       POSTGRES_DB: usersdb
     ports:
       - "5432:5432"
@@ -19,8 +19,8 @@ services:
     ports:
       - 27017:27017
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: temppassword
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODBUSERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODBPASSWORD}
   redis:
     image: redis
     restart: always
