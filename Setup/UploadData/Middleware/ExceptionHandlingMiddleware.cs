@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace UploadData.Middleware;
 
-public class ExceptionHandling
+public class ExceptionHandlingMiddleware
 {
     private readonly string _contentTypeJson = "application/json";
     private readonly RequestDelegate _next;
 
-    public ExceptionHandling(RequestDelegate next)
+    public ExceptionHandlingMiddleware(RequestDelegate next)
     {
         _next = next;
     }

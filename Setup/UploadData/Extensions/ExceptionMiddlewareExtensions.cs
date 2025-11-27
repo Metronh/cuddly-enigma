@@ -1,0 +1,11 @@
+using UploadData.Middleware;
+
+namespace UploadData.Extensions;
+
+public static class ExceptionMiddlewareExtensions
+{
+    public static void UseCustomExceptionHandling(this WebApplication app)
+    {
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
+    }
+}
