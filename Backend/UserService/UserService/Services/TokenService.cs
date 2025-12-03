@@ -1,0 +1,44 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using UserService.AppSettings;
+using UserService.Interfaces.Services;
+
+namespace UserService.Services;
+
+public class TokenService : ITokenService
+{
+    private readonly JwtInformation _jwtInformation;
+
+    public TokenService(IOptions<JwtInformation> jwtInformation)
+    {
+        _jwtInformation = jwtInformation.Value;
+    }
+
+    public string GenerateToken(Guid id, string email)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = System.Text.Encoding.UTF8.GetBytes(_jwtInformation.TokenKey);
+
+        var claims = new List<Claim>
+        {
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(JwtRegisteredClaimNames.Sub, id.ToString()),
+            new(JwtRegisteredClaimNames.Email, email),
+        };
+        var tokenDescription = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddMinutes(10),
+            Issuer = _jwtInformation.Issuer,
+            Audience = _jwtInformation.Audience,
+            SigningCredentials =
+                new SigningCredentials(new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescription);
+        return tokenHandler.WriteToken(token);
+    }
+}
