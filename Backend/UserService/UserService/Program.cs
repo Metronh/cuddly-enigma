@@ -9,20 +9,19 @@ using UserService.Interfaces.Repository;
 using UserService.Interfaces.Services;
 using UserService.Repository;
 using UserService.Services;
-using UserService.Validation;
+using UserService.SetUpProject;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.Configure<ConnectionStrings>(builder.Configuration.GetSection("ConnectionStrings"));
+builder.AddSwagger();
+builder.AddAppSettings();
+builder.AddValidators();
+builder.AddServices();
 
 builder.Services.AddSingleton<IDbConnectionFactory, NpgsqlDbConnectionFactory>();
-builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<CreateUserRequestValidator>();
 builder.Services.AddSingleton<PasswordHasher<UserEntity>>();
 
 

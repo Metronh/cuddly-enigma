@@ -20,7 +20,7 @@ public class UserRepository : IUserRepository
     {
         _logger.LogInformation("{Class}.{Method} started at {Time}",
             nameof(UserRepository), nameof(CreateUser), DateTime.UtcNow);
-        var connection = await _connectionFactory.CreateConnectionAsync();
+        using var connection = await _connectionFactory.CreateConnectionAsync();
         await connection.ExecuteAsync(
             """
             INSERT INTO users (Id, Username, Email, FirstName, LastName, Administrator, Password) 
@@ -31,5 +31,23 @@ public class UserRepository : IUserRepository
 
         _logger.LogInformation("{Class}.{Method} completed at {Time}",
             nameof(UserRepository), nameof(CreateUser), DateTime.UtcNow);
+    }
+
+    public async Task<UserEntity?> GetUserLoginDetails(string username)
+    {
+        _logger.LogInformation("{Class}.{Method} started at {Time}",
+            nameof(UserRepository), nameof(GetUserLoginDetails), DateTime.UtcNow);
+
+        using var connection = await _connectionFactory.CreateConnectionAsync();
+        
+        
+        var user = await connection.QueryFirstOrDefaultAsync<UserEntity>("""
+                                                                SELECT * FROM users WHERE username = @Username
+                                                                """, new {Username = username});
+        
+        
+        _logger.LogInformation("{Class}.{Method} completed at {Time}",
+            nameof(UserRepository), nameof(GetUserLoginDetails), DateTime.UtcNow);
+        return user;
     }
 }
