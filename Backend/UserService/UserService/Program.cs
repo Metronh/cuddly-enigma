@@ -1,15 +1,12 @@
 using Microsoft.AspNetCore.Identity;
-using UserService.AppSettings;
 using UserService.Database;
 using UserService.Endpoints;
 using UserService.Entities;
 using UserService.Extensions;
 using UserService.Interfaces.Database;
 using UserService.Interfaces.Repository;
-using UserService.Interfaces.Services;
 using UserService.Repository;
-using UserService.Services;
-using UserService.SetUpProject;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,17 +1,11 @@
-using Microsoft.AspNetCore.Identity;
 using UserService.AppSettings;
-using UserService.Database;
-using UserService.Entities;
-using UserService.Interfaces.Database;
-using UserService.Interfaces.Repository;
 using UserService.Interfaces.Services;
-using UserService.Repository;
 using UserService.Services;
 using UserService.Validation;
 
-namespace UserService.SetUpProject;
+namespace UserService.Extensions;
 
-public static class SetUp
+public static class ServiceRegistrationExtensions
 {
     public static void AddServices(this WebApplicationBuilder builder)
     {
