@@ -20,10 +20,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Restore dependencies UploadData
-      run: dotnet restore Setup/UploadData/UploadData.csproj  
-    - name: Build UploadData
-      run: dotnet build Setup/UploadData/UploadData.csproj --no-restore
+    - name: Restore dependencies SetUp
+      run: dotnet restore Setup/SetUp/SetUp.csproj  
+    - name: Build SetUp
+      run: dotnet build Setup/SetUp/SetUp.csproj --no-restore
 
     - name: Restore dependencies ArticleService
       run: dotnet restore Backend/ArticleService/ArticleService/ArticleService.csproj
