@@ -1,21 +1,22 @@
 using ArticleService.Entities;
 using ArticleService.Interfaces.Database;
+using ArticleService.Interfaces.Repository;
 using ArticleService.Interfaces.Services;
 using ArticleService.Models.Request;
 using ArticleService.Models.Response;
-using MongoDB.Driver;
 
 namespace ArticleService.Services;
 
 public class ArticlesService : IArticlesService
 {
-    private readonly IMongoDbConnectionFactory _mongoDbConnectionFactory;
     private readonly ILogger<ArticlesService> _logger;
+    private readonly IArticlesRepository _articlesRepository;
 
-    public ArticlesService(IMongoDbConnectionFactory mongoDbConnectionFactory, ILogger<ArticlesService> logger)
+    public ArticlesService(ILogger<ArticlesService> logger,
+        IArticlesRepository articlesRepository)
     {
-        _mongoDbConnectionFactory = mongoDbConnectionFactory;
         _logger = logger;
+        _articlesRepository = articlesRepository;
     }
 
 
@@ -23,11 +24,8 @@ public class ArticlesService : IArticlesService
     {
         _logger.LogInformation("{Class}.{Method} started at {Time}",
             nameof(ArticlesService), nameof(GetArticleByTitle), DateTime.UtcNow);
-        var collection = _mongoDbConnectionFactory.GetCollection();
-        
-        List<ArticleEntity> articleSearchResult =
-            await collection.Find(a => a.Title.Equals(request.PossibleTitle)).ToListAsync();
 
+        List<ArticleEntity> articleSearchResult = await _articlesRepository.GetArticlesByTitle(request.PossibleTitle);
         var response = new List<ArticleResponse>();
 
         foreach (var articleEntity in articleSearchResult)
@@ -40,6 +38,7 @@ public class ArticlesService : IArticlesService
                 Content = articleEntity.Content,
             });
         }
+
         _logger.LogInformation("{Class}.{Method} complete at {Time}",
             nameof(ArticlesService), nameof(GetArticleByTitle), DateTime.UtcNow);
         return response;
@@ -49,7 +48,7 @@ public class ArticlesService : IArticlesService
     {
         _logger.LogInformation("{Class}.{Method} started at {Time}",
             nameof(ArticlesService), nameof(CreateArticle), DateTime.UtcNow);
-        var collection = _mongoDbConnectionFactory.GetCollection();
+
         var article = new ArticleEntity
         {
             Author = request.Author,
@@ -59,8 +58,8 @@ public class ArticlesService : IArticlesService
             Id = Guid.NewGuid()
         };
 
-        await collection.InsertOneAsync(article);
-        
+        await _articlesRepository.CreateArticle(article);
+
         _logger.LogInformation("{Class}.{Method} complete at {Time}",
             nameof(ArticlesService), nameof(CreateArticle), DateTime.UtcNow);
     }

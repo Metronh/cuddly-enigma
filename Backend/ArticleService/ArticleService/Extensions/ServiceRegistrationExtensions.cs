@@ -1,7 +1,9 @@
 using ArticleService.AppSettings;
 using ArticleService.Database;
 using ArticleService.Interfaces.Database;
+using ArticleService.Interfaces.Repository;
 using ArticleService.Interfaces.Services;
+using ArticleService.Repository;
 using ArticleService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -53,8 +55,11 @@ public static class ServiceRegistrationExtensions
     public static void RegisterDatabases(this WebApplicationBuilder builder) =>
         builder.Services.AddSingleton<IMongoDbConnectionFactory, MongoDbConnectionFactory>();
 
-    public static void RegisterServices(this WebApplicationBuilder builder) =>
+    public static void RegisterServices(this WebApplicationBuilder builder)
+    {
         builder.Services.AddSingleton<IArticlesService, ArticlesService>();
+        builder.Services.AddSingleton<IArticlesRepository, ArticlesRepository>();
+    }
 
     public static void RegisterAuthorization(this WebApplicationBuilder builder, JwtInformation jwtInfo)
     {
