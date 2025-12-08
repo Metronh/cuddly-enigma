@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.RegisterSwagger();
 builder.RegisterAppSettings();
 builder.RegisterDatabases();
+builder.AddInMemoryCaching();
 builder.RegisterServices();
 builder.RegisterAuthorization(builder.Configuration.GetSection("JwtTokenInformation").Get<JwtInformation>());
 

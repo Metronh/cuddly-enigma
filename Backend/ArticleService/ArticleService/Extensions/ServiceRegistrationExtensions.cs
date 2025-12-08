@@ -6,6 +6,7 @@ using ArticleService.Interfaces.Services;
 using ArticleService.Repository;
 using ArticleService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -34,15 +35,14 @@ public static class ServiceRegistrationExtensions
                     {
                         Reference = new OpenApiReference
                         {
-                            Type=ReferenceType.SecurityScheme,
-                            Id="Bearer"
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
                         }
                     },
-                    new string[]{}
+                    new string[] { }
                 }
             });
         });
-
     }
 
     public static void RegisterAppSettings(this WebApplicationBuilder builder)
@@ -57,8 +57,16 @@ public static class ServiceRegistrationExtensions
 
     public static void RegisterServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddSingleton<IArticlesService, ArticlesService>();
+        builder.Services.AddSingleton<ArticlesService>();
+        builder.Services.AddSingleton<IArticlesService>(x =>
+            new CachedArticleService(x.GetRequiredService<ArticlesService>(), x.GetRequiredService<IMemoryCache>(),
+                x.GetRequiredService<ILogger<CachedArticleService>>()));
         builder.Services.AddSingleton<IArticlesRepository, ArticlesRepository>();
+    }
+
+    public static void AddInMemoryCaching(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddMemoryCache();
     }
 
     public static void RegisterAuthorization(this WebApplicationBuilder builder, JwtInformation jwtInfo)
